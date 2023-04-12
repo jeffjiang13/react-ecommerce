@@ -1,4 +1,5 @@
 module.exports = [
+
   "strapi::errors",
   {
     name: "strapi::security",
@@ -11,6 +12,13 @@ module.exports = [
           "media-src": ["'self'", "data:", "blob:", "res.cloudinary.com"],
           upgradeInsecureRequests: null,
         },
+      },
+
+    },
+    settings: {
+      cors: {
+        enabled: true,
+        origin: ['https://jj-react-ecommerce.vercel.app/'],
       },
     },
   },
