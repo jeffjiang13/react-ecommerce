@@ -46,7 +46,7 @@
 
 ## :dart: About ##
 
-Describe your project
+Ecommerce store
 
 ## :sparkles: Features ##
 
