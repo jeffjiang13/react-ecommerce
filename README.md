@@ -1,5 +1,5 @@
 <div align="center" id="top">
-  <img src="./.github/app.gif" alt="React Ecommerce" />
+  <img src="client/public/clothing.png" alt="React Ecommerce" />
 
   &#xa0;
 
