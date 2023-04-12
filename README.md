@@ -13,7 +13,7 @@
 
   <img alt="Github language count" src="https://img.shields.io/github/languages/count/jeffjiang13/react-ecommerce?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{jeffjiang13}}/react-ecommerce?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/jeffjiang13/react-ecommerce?color=56BEB8">
 
   <img alt="License" src="https://img.shields.io/github/license/jeffjiang13/react-ecommerce?color=56BEB8">
 
