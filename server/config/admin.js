@@ -1,5 +1,4 @@
 module.exports = ({ env }) => ({
-  url: 'https://react-ecommerce-7d0j.onrender.com', // Replace with your Strapi backend URL
   auth: {
     secret: env('ADMIN_JWT_SECRET'),
   },
