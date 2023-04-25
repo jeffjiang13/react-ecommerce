@@ -2,20 +2,17 @@
   "kind": "collectionType",
   "collectionName": "items",
   "info": {
-    "singularName": "item",
-    "pluralName": "items",
-    "displayName": "Item",
-    "description": ""
+    "name": "Item"
   },
   "options": {
+    "increments": true,
+    "timestamps": true,
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string",
-      "required": true,
-      "unique": true
+      "type": "string"
     },
     "shortDescription": {
       "type": "richtext"
@@ -24,19 +21,19 @@
       "type": "richtext"
     },
     "price": {
-      "type": "decimal",
-      "required": true
+      "type": "decimal"
     },
     "image": {
-      "type": "media",
-      "multiple": false,
-      "required": true,
+      "model": "file",
+      "via": "related",
       "allowedTypes": [
         "images",
         "files",
-        "videos",
-        "audios"
-      ]
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
     },
     "category": {
       "type": "enumeration",
