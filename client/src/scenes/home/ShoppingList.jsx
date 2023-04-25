@@ -20,7 +20,7 @@ const ShoppingList = () => {
 
   async function getItems() {
     const items = await fetch(
-      "https://react-ecommerce-7d0j.onrender.com/api/items?populate=image",
+      "https://react-ecommerce-7d0j.onrender.com/api/items",
       { method: "GET" }
     );
     const itemsJson = await items.json();
