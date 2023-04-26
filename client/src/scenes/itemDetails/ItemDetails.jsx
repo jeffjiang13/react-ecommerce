@@ -33,6 +33,8 @@ const ItemDetails = () => {
     );
     const itemJson = await item.json();
     setItem(itemJson.data);
+    setIsImageLoading(false); // Add this line
+
   }
 
   async function getItems() {
@@ -56,18 +58,17 @@ const ItemDetails = () => {
       <Box display="flex" flexWrap="wrap" columnGap="40px">
         {/* IMAGES */}
         <Box flex="1 1 40%" mb="40px">
-        {isImageLoading ? (
-  <div>Loading...</div> // Replace this with a loading spinner or a placeholder image
-) : (
-  <img
-    alt={item?.name}
-    width="100%"
-    height="100%"
-    src={`https://react-ecommerce-7d0j.onrender.com${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
-    style={{ objectFit: "contain" }}
-    onLoad={() => setIsImageLoading(false)}
-  />
-)}
+          {isImageLoading ? (
+            <div>Loading...</div> // Replace this with a loading spinner or a placeholder image
+          ) : (
+            <img
+              alt={item?.name}
+              width="100%"
+              height="100%"
+              src={`https://react-ecommerce-7d0j.onrender.com${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
+              style={{ objectFit: "contain" }}
+            />
+          )}
         </Box>
 
         {/* ACTIONS */}
