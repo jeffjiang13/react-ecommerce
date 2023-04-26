@@ -17,7 +17,13 @@ function Footer() {
         rowGap="30px"
         columnGap="clamp(20px, 30px, 40px)"
       >
-        <Box width="clamp(20%, 30%, 40%)">
+        <Box
+          width="clamp(20%, 30%, 40%)"
+          sx={{
+            order: { xs: 1, sm: 0 },
+            marginBottom: { xs: '30px', sm: '0px' },
+          }}
+        >
           <Typography
             variant="h4"
             fontWeight="bold"
