@@ -11,19 +11,12 @@ function Footer() {
       <Box
         width="80%"
         margin="auto"
-        display="flex"
-        justifyContent="space-between"
-        flexWrap="wrap"
+        display="grid"
+        gridTemplateColumns={{ xs: "1fr", sm: "2fr 1fr 1fr 1fr" }}
         rowGap="30px"
         columnGap="clamp(20px, 30px, 40px)"
       >
-        <Box
-          width="clamp(20%, 30%, 40%)"
-          sx={{
-            order: { xs: 1, sm: 0 },
-            marginBottom: { xs: '30px', sm: '0px' },
-          }}
-        >
+        <Box width="clamp(20%, 30%, 40%)">
           <Typography
             variant="h4"
             fontWeight="bold"
