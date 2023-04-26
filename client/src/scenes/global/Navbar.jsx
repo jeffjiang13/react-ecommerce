@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, TextField } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -11,9 +12,17 @@ import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
 
 function Navbar() {
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Perform the search logic here or navigate to the search page with the query.
+    console.log("Searching for:", search);
+    setSearch("");
+  };
 
   return (
     <Box
@@ -48,9 +57,16 @@ function Navbar() {
           columnGap="20px"
           zIndex="2"
         >
-          <IconButton sx={{ color: "black" }}>
-            <SearchOutlined />
-          </IconButton>
+          <form onSubmit={handleSearch}>
+            <TextField
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search"
+              InputProps={{
+                startAdornment: <SearchOutlined />,
+              }}
+            />
+          </form>
           <IconButton sx={{ color: "black" }}>
             <PersonOutline />
           </IconButton>
