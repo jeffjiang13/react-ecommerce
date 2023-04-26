@@ -1,6 +1,15 @@
 import { useTheme } from "@emotion/react";
 import { Box, Typography } from "@mui/material";
+import { styled } from "@mui/system";
 import { shades } from "../../theme";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  width: "clamp(20%, 30%, 40%)",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+    marginBottom: theme.spacing(3),
+  },
+}));
 
 function Footer() {
   const {
@@ -11,12 +20,13 @@ function Footer() {
       <Box
         width="80%"
         margin="auto"
-        display="grid"
-        gridTemplateColumns={{ xs: "1fr", sm: "2fr 1fr 1fr 1fr" }}
+        display="flex"
+        justifyContent="space-between"
+        flexWrap="wrap"
         rowGap="30px"
         columnGap="clamp(20px, 30px, 40px)"
       >
-        <Box width="clamp(20%, 30%, 40%)">
+        <StyledBox>
           <Typography
             variant="h4"
             fontWeight="bold"
@@ -32,7 +42,7 @@ function Footer() {
             <p>Connect with us on social media to stay updated on new arrivals, promotions, and more. We can't wait to see how you style your ChiqueChick creations!</p>
             <p>© ChiqueChick 2021. All rights reserved.</p>
           </div>
-        </Box>
+        </StyledBox>
 
         <Box>
           <Typography variant="h4" fontWeight="bold" mb="30px">
