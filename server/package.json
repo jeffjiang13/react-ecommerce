@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "strapi-ecommerce",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -10,33 +10,21 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.18.2",
-    "knex": "0.21.18",
-    "raw-body": "^2.5.2",
-    "sqlite3": "5.0.0",
-    "strapi": "^3.6.11",
-    "strapi-admin": "3.6.6",
-    "strapi-connector-bookshelf": "3.6.6",
-    "strapi-connector-mongoose": "^3.6.11",
-    "strapi-plugin-content-manager": "3.6.6",
-    "strapi-plugin-content-type-builder": "3.6.6",
-    "strapi-plugin-email": "3.6.6",
-    "strapi-plugin-i18n": "3.6.6",
-    "strapi-plugin-upload": "3.6.6",
-    "strapi-plugin-users-permissions": "3.6.6",
-    "strapi-utils": "3.6.6",
-    "stripe": "^12.2.0"
+    "@strapi/plugin-i18n": "4.3.8",
+    "@strapi/plugin-users-permissions": "4.3.8",
+    "@strapi/strapi": "4.3.8",
+    "better-sqlite3": "7.4.6",
+    "stripe": "^10.8.0"
   },
   "author": {
     "name": "A Strapi developer"
   },
   "strapi": {
-    "uuid": "65ab5089-fcd0-45a1-94c7-f83fddd6c1a8"
+    "uuid": "e4a2f37f-046f-472f-bff8-c63d7aa6e85c"
   },
   "engines": {
-    "node": ">=10.16.0 <=14.x.x",
-    "npm": "^6.0.0"
+    "node": ">=14.19.1 <=16.x.x",
+    "npm": ">=6.0.0"
   },
   "license": "MIT"
 }
