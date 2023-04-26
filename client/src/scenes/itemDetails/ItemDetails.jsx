@@ -25,7 +25,7 @@ const ItemDetails = () => {
 
   async function getItem() {
     const item = await fetch(
-      `https://react-ecommerce-7d0j.onrender.com/items/${itemId}?populate=image`,
+      `https://react-ecommerce-7d0j.onrender.com/api/items/${itemId}?populate=image`,
       {
         method: "GET",
       }
@@ -36,7 +36,7 @@ const ItemDetails = () => {
 
   async function getItems() {
     const items = await fetch(
-      `https://react-ecommerce-7d0j.onrender.com/items?populate=image`,
+      `https://react-ecommerce-7d0j.onrender.com/api/items?populate=image`,
       {
         method: "GET",
       }
