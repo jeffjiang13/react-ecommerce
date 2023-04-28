@@ -16,13 +16,21 @@ function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Perform the search logic here or navigate to the search page with the query.
-    console.log("Searching for:", search);
+    navigate(`/search/${search}`);
     setSearch("");
   };
+  const handleProfileClick = () => {
+    if (isAuthenticated) {
+      navigate("/profile");
+    } else {
+      navigate("/login");
+    }
+  };
+
 
   return (
     <Box
@@ -67,8 +75,12 @@ function Navbar() {
               }}
             />
           </form>
-          <IconButton sx={{ color: "black" }}>
-            <PersonOutline />
+          <IconButton sx={{ color: "black" }} onClick={handleProfileClick}>
+            {isAuthenticated ? (
+              <PersonOutline />
+            ) : (
+              <PersonOutline />
+            )}
           </IconButton>
           <Badge
             badgeContent={cart.length}

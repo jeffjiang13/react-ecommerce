@@ -1,15 +1,13 @@
 "use strict";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-/**
- * order controller
- */
-
 const { createCoreController } = require("@strapi/strapi").factories;
 
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
   async create(ctx) {
-    const { products, userName, email } = ctx.request.body;
+    const { products, userName, email, userId } = ctx.request.body;
+    console.log('Received userId:', userId); // Add this line
+
     try {
       // retrieve item information
       const lineItems = await Promise.all(
@@ -36,15 +34,18 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         payment_method_types: ["card"],
         customer_email: email,
         mode: "payment",
-        success_url: "https://jj-react-ecommerce.vercel.app/checkout/success",
+        success_url: "http://localhost:3000/checkout/success",
         cancel_url: "https://jj-react-ecommerce.vercel.app",
         line_items: lineItems,
       });
 
-      // create the item
+      // Find the user instance
+      const user = await strapi.plugins['users-permissions'].services.user.fetch({ id: userId });
+
+      // create the order
       await strapi
         .service("api::order.order")
-        .create({ data: { userName, products, stripeSessionId: session.id } });
+        .create({ data: { userName, products, stripeSessionId: session.id, user } });
 
       // return the session id
       return { id: session.id };

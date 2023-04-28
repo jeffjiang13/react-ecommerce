@@ -7,4 +7,12 @@ module.exports = ({ env }) => ({
   webhooks: {
     populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
   },
+  settings: {
+    cors: {
+      enabled: true,
+      origin: ['http://localhost:3000', "https://jj-react-ecommerce.vercel.app/"], // Add your frontend URL here
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      headers: ['Content-Type', 'Authorization', 'X-Frame-Options'],
+    },
+  },
 });

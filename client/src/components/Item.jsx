@@ -16,16 +16,8 @@ const Item = ({ item, width }) => {
     palette: { neutral },
   } = useTheme();
 
-  const { category, price, name, image } = item.attributes;
-  const {
-    data: {
-      attributes: {
-        formats: {
-          medium: { url },
-        },
-      },
-    },
-  } = image;
+  const { category = "", price = 0, name = "", image = {} } = item?.attributes || {};
+  const url = image?.data?.attributes?.formats?.medium?.url || "";
 
   return (
     <Box width={width}>

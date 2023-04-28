@@ -12,3 +12,26 @@ body {
 .app {
   margin: auto;
 }
+/* Mobile view */
+@media (max-width: 767px) {
+  .item-wrapper {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Tablet view */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .item-wrapper {
+    width: calc(50% - 10px);
+    min-width: auto;
+  }
+}
+
+/* Desktop view */
+@media (min-width: 1024px) {
+  .item-wrapper {
+    width: calc(33.33% - 10px);
+    min-width: auto;
+  }
+}

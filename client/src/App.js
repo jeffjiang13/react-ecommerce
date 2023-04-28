@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
+// import { useSelector } from 'react-redux'; // Add this import
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./scenes/home/Home";
 import Navbar from "./scenes/global/Navbar";
@@ -7,6 +8,14 @@ import ItemDetails from "./scenes/itemDetails/ItemDetails";
 import CartMenu from "./scenes/global/CartMenu";
 import Checkout from "./scenes/checkout/Checkout";
 import Confirmation from "./scenes/checkout/Confirmation";
+import SearchPage from "./scenes/SearchPage";
+import LoginPage from "./auth/LoginPage";
+import RegisterPage from "./auth/RegisterPage";
+import ProfilePage from "./auth/ProfilePage";
+import { checkAndLoadUserFromStorage } from "./features/utils";
+
+import { useDispatch } from 'react-redux';
+import { login } from './features/auth/authSlice'; // Update the path to your authSlice
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -19,6 +28,22 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Add this line
+  const dispatch = useDispatch();
+
+  // ... other code
+  useEffect(() => {
+    checkAndLoadUserFromStorage(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      // If JWT token is found in localStorage, update the Redux store
+      dispatch(login({ jwt }));
+    }
+  }, [dispatch]);
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -29,6 +54,10 @@ function App() {
           <Route path="item/:itemId" element={<ItemDetails />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="checkout/success" element={<Confirmation />} />
+          <Route path="/search/:query" element={<SearchPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
         <CartMenu />
         <Footer />

@@ -1,9 +1,19 @@
-'use strict';
+const webpack = require('webpack');
+// ...
 
-/* eslint-disable no-unused-vars */
-module.exports = (config, webpack) => {
-  // Note: we provide webpack above so you should not `require` it
-  // Perform customizations to webpack config
-  // Important: return the modified config
-  return config;
+module.exports = {
+  // ...
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+    },
+  },
+  plugins: [
+    // ...
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
 };
