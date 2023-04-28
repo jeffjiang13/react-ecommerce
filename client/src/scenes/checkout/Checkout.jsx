@@ -53,16 +53,20 @@ async function makePayment(values) {
 
   const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, // Add this line
+  },
     body: JSON.stringify(requestBody),
   });
   const session = await response.json();
 
   console.log(session); // Log the session object
+  console.log("Stripe sessionId:", session.id);
 
   await stripe.redirectToCheckout({
     sessionId: session.id,
   });
+  console.log("loggedInUser:", loggedInUser);
+
 }
 
 
