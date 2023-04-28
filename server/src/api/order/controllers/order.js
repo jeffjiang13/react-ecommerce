@@ -12,9 +12,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       // retrieve item information
       const lineItems = await Promise.all(
         products.map(async (product) => {
-          const item = await strapi
-            .service("api::item.item")
-            .findOne(product.id);
+          const item = await strapi.services.item.findOne(product.id);
 
           return {
             price_data: {
@@ -34,7 +32,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         payment_method_types: ["card"],
         customer_email: email,
         mode: "payment",
-        success_url: "http://localhost:3000/checkout/success",
+        success_url: "https://jj-react-ecommerce.vercel.app/checkout/success?session_id={CHECKOUT_SESSION_ID}",
         cancel_url: "https://jj-react-ecommerce.vercel.app",
         line_items: lineItems,
       });
@@ -43,15 +41,18 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       const user = await strapi.plugins['users-permissions'].services.user.fetch({ id: userId });
 
       // create the order
-      await strapi
-        .service("api::order.order")
-        .create({ data: { userName, products, stripeSessionId: session.id, user } });
+      await strapi.services.order.create({
+        userName,
+        products,
+        stripeSessionId: session.id,
+        user
+      });
 
       // return the session id
-      return { id: session.id };
+      ctx.send({ id: session.id });
     } catch (error) {
       ctx.response.status = 500;
-      return { error: { message: "There was a problem creating the charge" } };
+      ctx.send({ error: { message: "There was a problem creating the charge" } });
     }
   },
 }));

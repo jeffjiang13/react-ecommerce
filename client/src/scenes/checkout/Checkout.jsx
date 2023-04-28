@@ -15,14 +15,14 @@ const stripePromise = loadStripe(
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const cart = useSelector((state) => state.cart.cart);
-  const loggedInUser = useSelector((state) => state.auth.user); // Replace this line with your logic to get the logged-in user from the state.
-
+  const userId = useSelector((state) => state.auth.user && state.auth.user.id); // Add this line
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
 
+    // this copies the billing address onto shipping address
     if (isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue("shippingAddress", {
         ...values.billingAddress,
@@ -31,15 +31,16 @@ const Checkout = () => {
     }
 
     if (isSecondStep) {
-      makePayment(values, loggedInUser);
+      makePayment(values);
     }
 
     actions.setTouched({});
   };
 
-  async function makePayment(values, loggedInUser) {
+  async function makePayment(values) {
     const stripe = await stripePromise;
-    const userId = loggedInUser && loggedInUser.id; // Get the user ID from the logged-in user object.
+    const loggedInUser = useSelector((state) => state.user.loggedInUser); // Replace this line with your logic to get the logged-in user from the state.
+    const userId = loggedInUser.id; // Get the user ID from the logged-in user object.
 
     const requestBody = {
       userName: [values.firstName, values.lastName].join(" "),
@@ -50,7 +51,6 @@ const Checkout = () => {
       })),
       userId, // Include the userId in the request body
     };
-    console.log('Request body:', requestBody); // Add this line
 
     const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
       method: "POST",
