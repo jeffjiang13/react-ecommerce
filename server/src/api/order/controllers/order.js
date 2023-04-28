@@ -38,16 +38,10 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         line_items: lineItems,
       });
 
-      // Find the user instance
-      const user = await strapi.plugins['users-permissions'].services.user.fetch({ id: userId });
-
-      // create the order
-      await strapi.services.order.create({
-        userName,
-        products,
-        stripeSessionId: session.id,
-        user
-      });
+      // create the item
+      await strapi
+        .service("api::order.order")
+        .create({ data: { userName, products, stripeSessionId: session.id, user } });
 
       // return the session id
       ctx.send({ id: session.id });
