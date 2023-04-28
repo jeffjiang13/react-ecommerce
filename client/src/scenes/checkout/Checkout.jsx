@@ -50,6 +50,7 @@ const Checkout = () => {
       })),
       userId, // Include the userId in the request body
     };
+    console.log('Request body:', requestBody); // Add this line
 
     const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
       method: "POST",
