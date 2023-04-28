@@ -15,14 +15,14 @@ const stripePromise = loadStripe(
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const cart = useSelector((state) => state.cart.cart);
-  const userId = useSelector((state) => state.auth.user && state.auth.user.id); // Add this line
+  const loggedInUser = useSelector((state) => state.auth.user); // Updated this line
+
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
 
-    // this copies the billing address onto shipping address
     if (isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue("shippingAddress", {
         ...values.billingAddress,
@@ -37,31 +37,34 @@ const Checkout = () => {
     actions.setTouched({});
   };
 
-  async function makePayment(values) {
-    const stripe = await stripePromise;
-    const loggedInUser = useSelector((state) => state.user.loggedInUser); // Replace this line with your logic to get the logged-in user from the state.
-    const userId = loggedInUser.id; // Get the user ID from the logged-in user object.
+async function makePayment(values) {
+  const stripe = await stripePromise;
+  const userId = loggedInUser && loggedInUser.id;
 
-    const requestBody = {
-      userName: [values.firstName, values.lastName].join(" "),
-      email: values.email,
-      products: cart.map(({ id, count }) => ({
-        id,
-        count,
-      })),
-      userId, // Include the userId in the request body
-    };
+  const requestBody = {
+    userName: [values.firstName, values.lastName].join(" "),
+    email: values.email,
+    products: cart.map(({ id, count }) => ({
+      id,
+      count,
+    })),
+    userId,
+  };
 
-    const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
-    const session = await response.json();
-    await stripe.redirectToCheckout({
-      sessionId: session.id,
-    });
-  }
+  const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestBody),
+  });
+  const session = await response.json();
+
+  console.log(session); // Log the session object
+
+  await stripe.redirectToCheckout({
+    sessionId: session.id,
+  });
+}
+
 
   return (
     <Box width="80%" m="100px auto">
@@ -223,7 +226,7 @@ const checkoutSchema = [
     }),
   }),
   yup.object().shape({
-    email: yup.string().required("required"),
+    email: yup.string().email("invalid email").required("required"),
     phoneNumber: yup.string().required("required"),
   }),
 ];

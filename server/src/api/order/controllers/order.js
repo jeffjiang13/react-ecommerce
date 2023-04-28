@@ -32,7 +32,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         payment_method_types: ["card"],
         customer_email: email,
         mode: "payment",
-        success_url: "https://jj-react-ecommerce.vercel.app/checkout/success?session_id={CHECKOUT_SESSION_ID}",
+        success_url: "https://jj-react-ecommerce.vercel.app/checkout/success",
         cancel_url: "https://jj-react-ecommerce.vercel.app",
         line_items: lineItems,
       });
