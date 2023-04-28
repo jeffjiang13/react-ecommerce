@@ -12,8 +12,9 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       // retrieve item information
       const lineItems = await Promise.all(
         products.map(async (product) => {
-          const item = await strapi.services.item.findOne(product.id);
-
+          const item = await strapi
+          .service("api::item.item")
+          .findOne(product.id);
           return {
             price_data: {
               currency: "usd",
