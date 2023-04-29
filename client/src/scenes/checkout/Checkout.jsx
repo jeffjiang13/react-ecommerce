@@ -42,14 +42,21 @@ const Checkout = () => {
   async function makePayment(values) {
     const stripe = await stripePromise;
 
+    // Calculate the total for each product and the grand total
+    const productsWithTotal = cart.map(({ id, count, price }) => {
+      const total = count * price;
+      return { id, count, total };
+    });
+
+    const grandTotal = productsWithTotal.reduce((acc, product) => {
+      return acc + product.total;
+    }, 0);
+
     const requestBody = {
-      // userName: [values.firstName, values.lastName].join(" "),
       email: values.email,
-      products: cart.map(({ id, count }) => ({
-        id,
-        count,
-      })),
+      products: productsWithTotal,
       userName: loggedInUser.username, // Add user's username
+      grandTotal,
     };
     const response = await fetch(
       "https://react-ecommerce-7d0j.onrender.com/api/orders",
