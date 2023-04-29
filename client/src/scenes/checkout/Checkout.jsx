@@ -17,6 +17,9 @@ const Checkout = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
+  const loggedInUser = useSelector((state) => state.auth.user);
+  console.log("loggedInUser:", loggedInUser);
+  console.log(cart);
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
@@ -38,20 +41,24 @@ const Checkout = () => {
 
   async function makePayment(values) {
     const stripe = await stripePromise;
+
     const requestBody = {
-      userName: [values.firstName, values.lastName].join(" "),
+      // userName: [values.firstName, values.lastName].join(" "),
       email: values.email,
       products: cart.map(({ id, count }) => ({
         id,
         count,
       })),
+      userName: loggedInUser.username, // Add user's username
     };
-
-    const response = await fetch("https://react-ecommerce-7d0j.onrender.com/api/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
+    const response = await fetch(
+      "https://react-ecommerce-7d0j.onrender.com/api/orders",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      }
+    );
     const session = await response.json();
     await stripe.redirectToCheckout({
       sessionId: session.id,

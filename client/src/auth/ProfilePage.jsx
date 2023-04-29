@@ -47,12 +47,19 @@ const getOrderHistory = async (authToken, username) => {
       }
     );
     console.log("Response data:", response.data);
-    return response.data;
+    const orders = response.data.data;
+    const filteredOrders = orders.filter(
+      (order) => order.attributes.userName === username
+    );
+    console.log("Filtered orders:", filteredOrders);
+    return filteredOrders;
   } catch (error) {
     console.error("Error fetching order history:", error);
     return [];
   }
 };
+
+
 
 const ProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -137,9 +144,9 @@ const ProfilePage = () => {
             {Array.isArray(orderHistory) &&
               orderHistory.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
+                  <TableCell>{order.attributes.stripeSessionId}</TableCell>
                   <TableCell>
-                    {new Date(order.createdAt).toLocaleDateString()}
+                    {new Date(order.attributes.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>{order.total}</TableCell>
                   <TableCell>{order.status}</TableCell>
