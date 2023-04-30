@@ -34,6 +34,8 @@ const getUserInfo = async (userId, authToken) => {
 };
 
 const getOrderHistory = async (authToken, username) => {
+  console.log("getOrderHistory function called");
+
   try {
     const limit = 25; // The number of orders per request (page size)
     let start = 0;
