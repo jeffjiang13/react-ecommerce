@@ -17,6 +17,7 @@ import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const getUserInfo = async (userId, authToken) => {
+  console.log("getUserInfo function called");
   try {
     const response = await axios.get(
       `https://react-ecommerce-7d0j.onrender.com/api/users/${userId}`,
@@ -80,9 +81,9 @@ const getOrderHistory = async (authToken, username) => {
   }
 };
 
-
-
 const ProfilePage = () => {
+  console.log("ProfilePage component rendered");
+
   const [userInfo, setUserInfo] = useState(null);
   const [orderHistory, setOrderHistory] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -93,6 +94,7 @@ const ProfilePage = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
+    console.log("ProfilePage useEffect for isAuthenticated");
     if (!isAuthenticated && !isInitialLoad) {
       navigate("/login");
     }
@@ -105,6 +107,7 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
+    console.log("ProfilePage useEffect for fetchData");
     const fetchData = async () => {
       const userInfo = await getUserInfo(userId, authToken);
 
