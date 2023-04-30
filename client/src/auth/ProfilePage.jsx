@@ -115,6 +115,8 @@ const ProfilePage = () => {
         const orders = await getOrderHistory(authToken, userInfo.username);
         setUserInfo(userInfo);
         setOrderHistory(orders);
+        console.log('User Info:', userInfo);
+        console.log('Order History:', orderHistory);
       } else {
         console.error("Unable to fetch user information");
       }
@@ -162,24 +164,28 @@ const ProfilePage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(orderHistory) &&
-              orderHistory.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.attributes.stripeSessionId}</TableCell>
-                  <TableCell>
-                    {new Date(order.attributes.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    ${order.attributes.products.reduce(
-                      (acc, product) => acc + product.total,
-                      0
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {Math.random() < 0.5 ? "processed" : "order placed"}
-                  </TableCell>
-                </TableRow>
-              ))}
+          {Array.isArray(orderHistory) &&
+  orderHistory.map((order, index) => {
+    console.log(`Order ${index}:`, order);
+    return (
+      <TableRow key={order.id}>
+        <TableCell>{order.attributes.stripeSessionId}</TableCell>
+        <TableCell>
+          {new Date(order.attributes.createdAt).toLocaleDateString()}
+        </TableCell>
+        <TableCell>
+          ${order.attributes.products.reduce(
+            (acc, product) => acc + product.total,
+            0
+          )}
+        </TableCell>
+        <TableCell>
+          {Math.random() < 0.5 ? "processed" : "order placed"}
+        </TableCell>
+      </TableRow>
+    );
+  })}
+
           </TableBody>
         </Table>
       </TableContainer>
