@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton, TextField, InputAdornment } from "@mui/material";
+import { Badge, Box, IconButton, TextField } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -65,39 +65,20 @@ function Navbar() {
           columnGap="20px"
           zIndex="2"
         >
-<Box
-  component="form"
-  onSubmit={handleSearch}
-  display="flex"
-  alignItems="center"
-  width="100%"
-  maxWidth="400px"
-  margin="16px auto"
-  sx={{
-    borderRadius: 2,
-    boxShadow: 1,
-    bgcolor: "background.paper",
-    padding: "8px",
-    overflow: "hidden",
-  }}
->
+  <form onSubmit={handleSearch}>
   <TextField
     value={search}
     onChange={(e) => setSearch(e.target.value)}
     placeholder="Search"
-    fullWidth
     InputProps={{
-      startAdornment: (
-        <InputAdornment position="start">
-          <SearchOutlined />
-        </InputAdornment>
-      ),
+      startAdornment: <SearchOutlined />,
     }}
     sx={{
-      borderRadius: 2,
+      minWidth: isMobile ? "100px" : "200px",
+      fontSize: isMobile ? "0.8rem" : "1rem",
     }}
   />
-</Box>
+</form>
           <IconButton sx={{ color: "black" }} onClick={handleProfileClick}>
             {isAuthenticated ? (
               <PersonOutline />
