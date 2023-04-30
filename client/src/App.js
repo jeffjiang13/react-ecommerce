@@ -37,10 +37,12 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem("jwt");
     if (jwt) {
-      // If JWT token is found in localStorage, update the Redux store
-      dispatch(login({ jwt }));
+      // You can decode the JWT to get the user object.
+      // For simplicity, we assume the user object is stored in the JWT payload.
+      const user = JSON.parse(atob(jwt.split(".")[1]));
+      dispatch(login({ jwt, user }));
     }
   }, [dispatch]);
 

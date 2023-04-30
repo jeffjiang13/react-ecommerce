@@ -8,22 +8,22 @@ const initialState = {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: {
+    isAuthenticated: false,
+    token: localStorage.getItem("jwt"),
+    user: null,
+  },
   reducers: {
     login: (state, action) => {
-      console.log("Login action:", action);
-      const { user, token } = action.payload;
-      if (token) {
-        state.user = user;
-        state.token = token;
-        state.isAuthenticated = true;
-        localStorage.setItem("jwt", token);
-      }
+      state.isAuthenticated = true;
+      state.token = action.payload.jwt;
+      state.user = action.payload.user;
+      localStorage.setItem("jwt", action.payload.jwt);
     },
     logout: (state) => {
-      state.user = null;
-      state.token = null;
       state.isAuthenticated = false;
+      state.token = null;
+      state.user = null;
       localStorage.removeItem("jwt");
     },
   },
