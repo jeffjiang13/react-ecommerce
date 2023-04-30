@@ -35,24 +35,43 @@ const getUserInfo = async (userId, authToken) => {
 
 const getOrderHistory = async (authToken, username) => {
   try {
-    const response = await axios.get(
-      `https://react-ecommerce-7d0j.onrender.com/api/orders`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-        params: {
-          username: username,
-        },
+    const limit = 25; // The number of orders per request (page size)
+    let start = 0;
+    let allOrders = [];
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await axios.get(
+        `https://react-ecommerce-7d0j.onrender.com/api/orders`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          params: {
+            username: username,
+            _limit: limit,
+            _start: start,
+          },
+        }
+      );
+
+      console.log("Response data:", response.data);
+      const orders = response.data.data;
+      const pagination = response.data.meta.pagination;
+
+      if (orders.length > 0) {
+        allOrders = [...allOrders, ...orders];
+        start += limit;
+      } else {
+        hasMore = false;
       }
-    );
-    console.log("Response data:", response.data);
-    const orders = response.data.data;
-    const filteredOrders = orders.filter(
-      (order) => order.attributes.userName === username
-    );
-    console.log("Filtered orders:", filteredOrders);
-    return filteredOrders;
+
+      if (start >= pagination.total) {
+        hasMore = false;
+      }
+    }
+
+    return allOrders;
   } catch (error) {
     console.error("Error fetching order history:", error);
     return [];
@@ -92,7 +111,7 @@ const ProfilePage = () => {
         setUserInfo(userInfo);
         setOrderHistory(orders);
       } else {
-        console.error('Unable to fetch user information');
+        console.error("Unable to fetch user information");
       }
       setIsInitialLoad(false);
     };
@@ -116,10 +135,7 @@ const ProfilePage = () => {
       </Typography>
 
       {userInfo && (
-        <Box
-          display=""
-          alignItems="start"
-        >
+        <Box display="" alignItems="start">
           <Typography variant="h6">Name: {userInfo.username}</Typography>
           <Typography variant="h6">Email: {userInfo.email}</Typography>
         </Box>
@@ -134,7 +150,7 @@ const ProfilePage = () => {
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell>Order ID</TableCell>
+              <TableCell>Order ID</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Total</TableCell>
               <TableCell>Status</TableCell>
@@ -148,8 +164,15 @@ const ProfilePage = () => {
                   <TableCell>
                     {new Date(order.attributes.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>{order.total}</TableCell>
-                  <TableCell>{order.status}</TableCell>
+                  <TableCell>
+                    ${order.attributes.products.reduce(
+                      (acc, product) => acc + product.total,
+                      0
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {Math.random() < 0.5 ? "processed" : "order placed"}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

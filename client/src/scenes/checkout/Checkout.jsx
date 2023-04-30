@@ -39,18 +39,29 @@ const Checkout = () => {
     actions.setTouched({});
   };
 
-  async function makePayment(values) {
-    const stripe = await stripePromise;
+async function makePayment(values) {
+  const stripe = await stripePromise;
 
-    // Calculate the total for each product and the grand total
-    const productsWithTotal = cart.map(({ id, count, price }) => {
-      const total = count * price;
-      return { id, count, total };
-    });
+  // Fetch product prices from the server
+  const pricesResponse = await fetch("https://react-ecommerce-7d0j.onrender.com/api/items");
+  const pricesData = await pricesResponse.json();
+  const pricesArray = pricesData.data.map(item => ({ id: parseInt(item.id), price: item.attributes.price }));
 
-    const grandTotal = productsWithTotal.reduce((acc, product) => {
-      return acc + product.total;
-    }, 0);
+  // Replace the existing productsWithTotal line with this one
+  const productsWithTotal = cart.map(({ id, count }) => {
+    const product = pricesArray.find((product) => product.id === id);
+    const total = count * product.price;
+    return { id, count, total };
+  });
+
+  const grandTotal = productsWithTotal.reduce((acc, product) => {
+    return acc + product.total;
+  }, 0);
+
+  // ...rest of the function
+
+
+    console.log('Grand Total:', grandTotal); // Log the grand total
 
     const requestBody = {
       email: values.email,
