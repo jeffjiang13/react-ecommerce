@@ -65,20 +65,16 @@ function Navbar() {
           columnGap="20px"
           zIndex="2"
         >
-  <form onSubmit={handleSearch}>
-  <TextField
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    placeholder="Search"
-    InputProps={{
-      startAdornment: <SearchOutlined />,
-    }}
-    sx={{
-      minWidth: isMobile ? "100px" : "200px",
-      fontSize: isMobile ? "0.8rem" : "1rem",
-    }}
-  />
-</form>
+          <form onSubmit={handleSearch}>
+            <TextField
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search"
+              InputProps={{
+                startAdornment: <SearchOutlined />,
+              }}
+            />
+          </form>
           <IconButton sx={{ color: "black" }} onClick={handleProfileClick}>
             {isAuthenticated ? (
               <PersonOutline />
