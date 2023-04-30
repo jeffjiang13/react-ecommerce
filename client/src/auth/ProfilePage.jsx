@@ -107,11 +107,13 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    console.log("ProfilePage useEffect for fetchData");
+    console.log("fetchData: Calling getUserInfo");
     const fetchData = async () => {
       const userInfo = await getUserInfo(userId, authToken);
 
       if (userInfo) {
+        console.log("fetchData: Calling getOrderHistory");
+
         const orders = await getOrderHistory(authToken, userInfo.username);
         setUserInfo(userInfo);
         setOrderHistory(orders);
