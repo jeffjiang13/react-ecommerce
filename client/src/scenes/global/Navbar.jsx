@@ -6,6 +6,7 @@ import {
   ShoppingBagOutlined,
   MenuOutlined,
   SearchOutlined,
+  ArrowForwardIosOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
@@ -21,11 +22,12 @@ function Navbar() {
   const cart = useSelector((state) => state.cart.cart);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate(`/search/${search}`);
-    setSearch("");
-  };
+const handleSearch = (e) => {
+  e.preventDefault();
+  if (!search.trim()) return; // Prevents submission when the search input is empty
+  navigate(`/search/${search}`);
+};
+
   const handleProfileClick = () => {
     if (isAuthenticated) {
       navigate("/profile");
@@ -67,13 +69,21 @@ function Navbar() {
           columnGap="20px"
           zIndex="2"
         >
-          <form onSubmit={handleSearch}>
+          <form
+            onSubmit={handleSearch}
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <TextField
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search"
+              placeholder="Search..."
               InputProps={{
                 startAdornment: <SearchOutlined />,
+                endAdornment: (
+                  <IconButton type="submit" edge="end">
+                    <ArrowForwardIosOutlined fontSize="small" />
+                  </IconButton>
+                ),
               }}
             />
           </form>
