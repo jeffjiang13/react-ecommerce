@@ -10,6 +10,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
+import { setIsMenuOpen } from "../../state/menuActions";
+
+import Menu from "./Menu";
 
 function Navbar() {
   const [search, setSearch] = useState("");
@@ -30,7 +33,6 @@ function Navbar() {
       navigate("/login");
     }
   };
-
 
   return (
     <Box
@@ -76,11 +78,7 @@ function Navbar() {
             />
           </form>
           <IconButton sx={{ color: "black" }} onClick={handleProfileClick}>
-            {isAuthenticated ? (
-              <PersonOutline />
-            ) : (
-              <PersonOutline />
-            )}
+            {isAuthenticated ? <PersonOutline /> : <PersonOutline />}
           </IconButton>
           <Badge
             badgeContent={cart.length}
@@ -103,8 +101,12 @@ function Navbar() {
               <ShoppingBagOutlined />
             </IconButton>
           </Badge>
-          <IconButton sx={{ color: "black" }}>
+          <IconButton
+            onClick={() => dispatch(setIsMenuOpen())}
+            sx={{ color: "black" }}
+          >
             <MenuOutlined />
+            <Menu />
           </IconButton>
         </Box>
       </Box>

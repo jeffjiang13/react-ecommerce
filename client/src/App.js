@@ -16,6 +16,8 @@ import { checkAndLoadUserFromStorage } from "./features/utils";
 
 import { useDispatch } from 'react-redux';
 import { login } from './features/auth/authSlice'; // Update the path to your authSlice
+import ContactUs from "./scenes/ContactUs";
+import Menu from "./scenes/global/Menu";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -60,8 +62,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+
         </Routes>
         <CartMenu />
+        <Menu />
         <Footer />
       </BrowserRouter>
     </div>

@@ -12,6 +12,7 @@ import authReducer from "./features/auth/authSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import menuReducer from "./state/menuActions";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,8 @@ const store = configureStore({
   reducer: {
     cart: cartReducer,
     auth: persistedAuthReducer,
+    menu: menuReducer,
+
   },
   middleware: getDefaultMiddleware({
     serializableCheck: {
