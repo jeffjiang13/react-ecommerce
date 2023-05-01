@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton, TextField } from "@mui/material";
+import { Badge, Box, IconButton, TextField, Typography } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -61,15 +61,26 @@ function Navbar() {
       >
         <Box
           onClick={() => navigate("/")}
-          sx={{ "&:hover": { cursor: "pointer" }, fontSize: "24px" }}
+          sx={{
+            "&:hover": { cursor: "pointer" },
+            fontSize: "14px",
+            marginRight: "18px"
+          }}
           color={shades.secondary[500]}
         >
-          ChiqueChick
+          <Typography
+          marginTop={"20px"}
+            variant="h4"
+            fontWeight="bold"
+            mb="30px"
+            color={shades.secondary[500]}
+          >
+            ChiqueChick
+          </Typography>
         </Box>
         <form
           onSubmit={handleSearch}
-          style={{ display: "flex", alignItems: "center", gridColumn: "2 / 3"
-        }}
+          style={{ display: "flex", alignItems: "center", gridColumn: "2 / 3" }}
         >
           <TextField
             value={search}
@@ -144,4 +155,4 @@ function Navbar() {
   );
 }
 
-  export default Navbar;
+export default Navbar;
