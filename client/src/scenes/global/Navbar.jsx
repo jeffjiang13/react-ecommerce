@@ -61,14 +61,15 @@ function Navbar() {
       >
         <Box
           onClick={() => navigate("/")}
-          sx={{ "&:hover": { cursor: "pointer" } }}
+          sx={{ "&:hover": { cursor: "pointer" }, fontSize: "24px" }}
           color={shades.secondary[500]}
         >
           ChiqueChick
         </Box>
         <form
           onSubmit={handleSearch}
-          style={{ display: "flex", alignItems: "center", gridColumn: "2 / 3" }}
+          style={{ display: "flex", alignItems: "center", gridColumn: "2 / 3"
+        }}
         >
           <TextField
             value={search}
@@ -85,7 +86,7 @@ function Navbar() {
             onFocus={() => setIsSearchExpanded(true)}
             onBlur={() => setIsSearchExpanded(false)}
             sx={{
-              width: "200px",
+              width: "650px",
               "@media (max-width: 959px)": {
                 width: isSearchExpanded ? "200px" : "100px",
               },
@@ -99,7 +100,7 @@ function Navbar() {
           display="grid"
           gridTemplateColumns="auto auto auto"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="right"
           columnGap="20px"
           zIndex="2"
         >
