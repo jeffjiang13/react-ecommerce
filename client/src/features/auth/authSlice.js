@@ -20,6 +20,12 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       localStorage.setItem("jwt", action.payload.jwt);
     },
+    register: (state, action) => {
+      state.isAuthenticated = true;
+      state.token = action.payload.jwt;
+      state.user = action.payload.user;
+      localStorage.setItem("jwt", action.payload.jwt);
+    },
     logout: (state) => {
       state.isAuthenticated = false;
       state.token = null;
@@ -37,7 +43,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, register, logout } = authSlice.actions;
 
 // Add the new action
 export const loadUserFromStorage = createAction("auth/loadUserFromStorage");

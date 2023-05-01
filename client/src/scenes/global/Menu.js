@@ -39,6 +39,7 @@ function Menu() {
         width="max(400px, 30%)"
         height="100%"
         backgroundColor="white"
+
       >
         <Box padding="30px" overflow="auto" height="100%">
           {/* HEADER */}

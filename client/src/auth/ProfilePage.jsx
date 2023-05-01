@@ -73,7 +73,8 @@ const getOrderHistory = async (authToken, username) => {
         hasMore = false;
       }
     }
-
+    allOrders = allOrders.filter((order) => order.attributes.userName === username);
+    console.log("...........", allOrders)
     return allOrders;
   } catch (error) {
     console.error("Error fetching order history:", error);
@@ -166,27 +167,29 @@ const ProfilePage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-          {Array.isArray(orderHistory) &&
-  orderHistory.map((order, index) => {
-    console.log(`Order ${index}:`, order);
-    return (
-      <TableRow key={order.id}>
-        <TableCell>{order.attributes.stripeSessionId}</TableCell>
-        <TableCell>
-          {new Date(order.attributes.createdAt).toLocaleDateString()}
-        </TableCell>
-        <TableCell>
-          ${order.attributes.products.reduce(
-            (acc, product) => acc + product.total,
-            0
-          )}
-        </TableCell>
-        <TableCell>
-          {Math.random() < 0.5 ? "processed" : "order placed"}
-        </TableCell>
-      </TableRow>
-    );
-  })}
+{Array.isArray(orderHistory) &&
+  orderHistory
+    .filter((order) => order.attributes.userName === userInfo.username)
+    .map((order, index) => {
+      return (
+        <TableRow key={order.id}>
+          <TableCell>{order.attributes.stripeSessionId}</TableCell>
+          <TableCell>
+            {new Date(order.attributes.createdAt).toLocaleDateString()}
+          </TableCell>
+          <TableCell>
+            ${order.attributes.products.reduce(
+              (acc, product) => acc + product.total,
+              0
+            )}
+          </TableCell>
+          <TableCell>
+            {Math.random() < 0.5 ? "processed" : "order placed"}
+          </TableCell>
+        </TableRow>
+      );
+    })}
+
 
           </TableBody>
         </Table>

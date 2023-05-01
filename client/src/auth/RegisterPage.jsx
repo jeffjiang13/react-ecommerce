@@ -3,27 +3,37 @@ import { Box, TextField, Button, Typography, CircularProgress, Link as MuiLink }
 import { registerUser } from "../api";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../features/auth/authSlice";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      // Call your register function here with username, email, and password
       const userData = await registerUser(username, email, password);
       setLoading(false);
-      console.log(userData); // You can remove this line after verifying that registration works
-      // Redirect the user or save the token to the state, etc.
-      navigate('/profile');
+      console.log(userData);
+
+      // Save JWT to localStorage
+      localStorage.setItem("jwt", userData.jwt);
+
+      // Dispatch the loginSuccess action with the user data and JWT
+      dispatch(login({ user: userData.user, jwt: userData.jwt }));
+
+      // Navigate to the profile page
+      navigate("/profile");
 
     } catch (err) {
       setLoading(false);

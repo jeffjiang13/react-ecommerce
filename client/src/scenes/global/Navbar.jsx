@@ -17,16 +17,18 @@ import Menu from "./Menu";
 
 function Navbar() {
   const [search, setSearch] = useState("");
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-const handleSearch = (e) => {
-  e.preventDefault();
-  if (!search.trim()) return; // Prevents submission when the search input is empty
-  navigate(`/search/${search}`);
-};
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+    navigate(`/search/${search}`);
+  };
 
   const handleProfileClick = () => {
     if (isAuthenticated) {
@@ -52,7 +54,8 @@ const handleSearch = (e) => {
       <Box
         width="80%"
         margin="auto"
-        display="flex"
+        display="grid"
+        gridTemplateColumns="1fr 2fr 1fr"
         justifyContent="space-between"
         alignItems="center"
       >
@@ -63,31 +66,50 @@ const handleSearch = (e) => {
         >
           ChiqueChick
         </Box>
+        <form
+          onSubmit={handleSearch}
+          style={{ display: "flex", alignItems: "center", gridColumn: "2 / 3" }}
+        >
+          <TextField
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+            InputProps={{
+              startAdornment: <SearchOutlined />,
+              endAdornment: (
+                <IconButton type="submit" edge="end">
+                  <ArrowForwardIosOutlined fontSize="small" />
+                </IconButton>
+              ),
+            }}
+            onFocus={() => setIsSearchExpanded(true)}
+            onBlur={() => setIsSearchExpanded(false)}
+            sx={{
+              width: "200px",
+              "@media (max-width: 959px)": {
+                width: isSearchExpanded ? "200px" : "100px",
+              },
+              transition: "width 0.3s",
+              position: "relative",
+              zIndex: "auto",
+            }}
+          />
+        </form>
         <Box
-          display="flex"
+          display="grid"
+          gridTemplateColumns="auto auto auto"
+          alignItems="center"
           justifyContent="space-between"
           columnGap="20px"
           zIndex="2"
         >
-          <form
-            onSubmit={handleSearch}
-            style={{ display: "flex", alignItems: "center" }}
+          <IconButton
+            sx={{
+              color: "black",
+              gridColumn: "1 / 2",
+            }}
+            onClick={handleProfileClick}
           >
-            <TextField
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
-              InputProps={{
-                startAdornment: <SearchOutlined />,
-                endAdornment: (
-                  <IconButton type="submit" edge="end">
-                    <ArrowForwardIosOutlined fontSize="small" />
-                  </IconButton>
-                ),
-              }}
-            />
-          </form>
-          <IconButton sx={{ color: "black" }} onClick={handleProfileClick}>
             {isAuthenticated ? <PersonOutline /> : <PersonOutline />}
           </IconButton>
           <Badge
@@ -99,29 +121,26 @@ const handleSearch = (e) => {
                 right: 5,
                 top: 5,
                 padding: "0 4px",
-                height: "14px",
-                minWidth: "13px",
               },
+              gridColumn: "2 / 3",
             }}
+            onClick={() => dispatch(setIsCartOpen(true))}
           >
-            <IconButton
-              onClick={() => dispatch(setIsCartOpen({}))}
-              sx={{ color: "black" }}
-            >
-              <ShoppingBagOutlined />
-            </IconButton>
+            <ShoppingBagOutlined />
           </Badge>
           <IconButton
-            onClick={() => dispatch(setIsMenuOpen())}
-            sx={{ color: "black" }}
+            sx={{
+              gridColumn: "3 / 4",
+            }}
+            onClick={() => dispatch(setIsMenuOpen(true))}
           >
             <MenuOutlined />
-            <Menu />
           </IconButton>
         </Box>
       </Box>
+      <Menu />
     </Box>
   );
 }
 
-export default Navbar;
+  export default Navbar;
