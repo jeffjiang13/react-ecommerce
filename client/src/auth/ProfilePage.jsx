@@ -15,7 +15,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-
+import { resetWishlist } from '../features/wishlist/wishlistSlice';
 export const getUserInfo = async (userId, authToken) => {
   try {
     const response = await axios.get(
@@ -97,6 +97,8 @@ const ProfilePage = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(resetWishlist());
+
     localStorage.removeItem("jwt");
     navigate("/login");
   };

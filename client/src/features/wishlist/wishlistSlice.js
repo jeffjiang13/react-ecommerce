@@ -30,6 +30,10 @@ export const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
   reducers: {
+    resetWishlist: (state) => {
+      state.items = [];
+      saveWishlistToLocalStorage(state.items);
+    },
     addToWishlist: (state, action) => {
       const item = action.payload;
       const index = state.items.findIndex(
@@ -52,7 +56,7 @@ export const wishlistSlice = createSlice({
   },
 });
 
-export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
+export const { addToWishlist, removeFromWishlist,resetWishlist } = wishlistSlice.actions;
 
 export const selectWishlistItems = (state) => state.wishlist.items;
 
