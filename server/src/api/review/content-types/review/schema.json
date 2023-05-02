@@ -4,7 +4,8 @@
   "info": {
     "singularName": "review",
     "pluralName": "reviews",
-    "displayName": "Review"
+    "displayName": "Review",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -14,7 +15,7 @@
     "text": {
       "type": "string"
     },
-    "Author": {
+    "author": {
       "type": "string"
     },
     "itemId": {
