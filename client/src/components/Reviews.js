@@ -8,22 +8,40 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getUserInfo } from "../auth/ProfilePage";
 
 const Reviews = ({ itemId }) => {
-    const [reviews, setReviews] = useState([]);
-    const [newReview, setNewReview] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [username, setUsername] = useState(""); // New state variable for storing the fetched username
 
-    // Access the user information directly from the Redux state
-    const user = useSelector((state) => state.auth.user);
-
-
+  // Access the user information directly from the Redux state
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     fetchReviews();
-  }, []);
+    if (user) {
+      const token = localStorage.getItem("jwt");
+      fetchUserData(user.id, token);
+    }
+  }, [user]);
+
+  const fetchUserData = async (userId, authToken) => {
+    try {
+      const response = await axios.get(
+        `https://react-ecommerce-7d0j.onrender.com/api/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setUsername(response.data.username); // Set the fetched username
+    } catch (error) {
+      console.error("Error fetching user information:", error);
+    }
+  };
 
   const fetchReviews = async () => {
     try {
@@ -54,10 +72,12 @@ const Reviews = ({ itemId }) => {
       await axios.post(
         "https://react-ecommerce-7d0j.onrender.com/api/reviews",
         {
-          author: user.id,
-          text: newReview,
-          item: itemId,
-        },
+            data: {
+              author: username,
+              text: newReview,
+              itemId: itemId,
+            },
+          },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,13 +110,14 @@ const Reviews = ({ itemId }) => {
         .map((review) => (
           <div key={review.id}>
             <Typography fontWeight="bold">
-              BY: {review.attributes.Author}
+              BY: {review.attributes.author}
             </Typography>
             <Typography>{review.attributes.text}</Typography>
             <Typography>
               CREATED AT:{" "}
               {new Date(review.attributes.createdAt).toLocaleString()}
             </Typography>
+            <br />
           </div>
         ))
     )}

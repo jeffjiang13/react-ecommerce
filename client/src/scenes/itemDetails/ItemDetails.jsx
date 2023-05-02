@@ -89,7 +89,6 @@ const ItemDetails = ({ allItems }) => {
     getItem();
     getItems();
   }, [itemId]);
-  console.log(item);
   return (
     <Box width="80%" m="80px auto">
       <Box display="flex" flexWrap="wrap" columnGap="40px">

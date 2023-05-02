@@ -18,8 +18,7 @@ const Checkout = () => {
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
   const loggedInUser = useSelector((state) => state.auth.user);
-  console.log("loggedInUser:", loggedInUser);
-  console.log(cart);
+
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
@@ -61,7 +60,6 @@ async function makePayment(values) {
   // ...rest of the function
 
 
-    console.log('Grand Total:', grandTotal); // Log the grand total
 
     const requestBody = {
       email: values.email,
