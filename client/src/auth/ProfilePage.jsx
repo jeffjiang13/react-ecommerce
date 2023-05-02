@@ -16,8 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
-const getUserInfo = async (userId, authToken) => {
-  console.log("getUserInfo function called");
+export const getUserInfo = async (userId, authToken) => {
   try {
     const response = await axios.get(
       `https://react-ecommerce-7d0j.onrender.com/api/users/${userId}`,
@@ -35,7 +34,6 @@ const getUserInfo = async (userId, authToken) => {
 };
 
 const getOrderHistory = async (authToken, username) => {
-  console.log("getOrderHistory function called");
 
   try {
     const limit = 25; // The number of orders per request (page size)
@@ -58,7 +56,6 @@ const getOrderHistory = async (authToken, username) => {
         }
       );
 
-      console.log("Response data:", response.data);
       const orders = response.data.data;
       const pagination = response.data.meta.pagination;
 
@@ -74,7 +71,6 @@ const getOrderHistory = async (authToken, username) => {
       }
     }
     allOrders = allOrders.filter((order) => order.attributes.userName === username);
-    console.log("...........", allOrders)
     return allOrders;
   } catch (error) {
     console.error("Error fetching order history:", error);
@@ -83,7 +79,6 @@ const getOrderHistory = async (authToken, username) => {
 };
 
 const ProfilePage = () => {
-  console.log("ProfilePage component rendered");
 
   const [userInfo, setUserInfo] = useState(null);
   const [orderHistory, setOrderHistory] = useState([]);
@@ -95,7 +90,6 @@ const ProfilePage = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
-    console.log("ProfilePage useEffect for isAuthenticated");
     if (!isAuthenticated && !isInitialLoad) {
       navigate("/login");
     }
@@ -108,18 +102,15 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    console.log("fetchData: Calling getUserInfo");
     const fetchData = async () => {
       const userInfo = await getUserInfo(userId, authToken);
 
       if (userInfo) {
-        console.log("fetchData: Calling getOrderHistory");
 
         const orders = await getOrderHistory(authToken, userInfo.username);
         setUserInfo(userInfo);
         setOrderHistory(orders);
-        console.log('User Info:', userInfo);
-        console.log('Order History:', orderHistory);
+
       } else {
         console.error("Unable to fetch user information");
       }

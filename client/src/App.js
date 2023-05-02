@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from "react"; // Add useState
 // import { useSelector } from 'react-redux'; // Add this import
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./scenes/home/Home";
@@ -14,10 +14,11 @@ import RegisterPage from "./auth/RegisterPage";
 import ProfilePage from "./auth/ProfilePage";
 import { checkAndLoadUserFromStorage } from "./features/utils";
 
-import { useDispatch } from 'react-redux';
-import { login } from './features/auth/authSlice'; // Update the path to your authSlice
+import { useDispatch } from "react-redux";
+import { login } from "./features/auth/authSlice"; // Update the path to your authSlice
 import ContactUs from "./scenes/ContactUs";
 import Menu from "./scenes/global/Menu";
+import WishlistPage from "./components/WishlistPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -32,7 +33,22 @@ const ScrollToTop = () => {
 function App() {
   // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Add this line
   const dispatch = useDispatch();
+  const [allItems, setAllItems] = useState([]);
 
+  useEffect(() => {
+    const fetchAllItems = async () => {
+      const response = await fetch(
+        "https://react-ecommerce-7d0j.onrender.com/api/items?populate=image",
+        {
+          method: "GET",
+        }
+      );
+      const itemsJson = await response.json();
+      setAllItems(itemsJson.data);
+    };
+
+    fetchAllItems();
+  }, []);
   // ... other code
   useEffect(() => {
     checkAndLoadUserFromStorage(dispatch);
@@ -55,7 +71,14 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="item/:itemId" element={<ItemDetails />} />
+          <Route
+            path="/item/:itemId"
+            element={
+              <ItemDetails
+                allItems={allItems} // Pass allItems as a prop
+              />
+            }
+          />
           <Route path="checkout" element={<Checkout />} />
           <Route path="checkout/success" element={<Confirmation />} />
           <Route path="/search/:query" element={<SearchPage />} />
@@ -63,7 +86,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/contact-us" element={<ContactUs />} />
-
+          <Route path="/wishlist" element={<WishlistPage />} />
         </Routes>
         <CartMenu />
         <Menu />

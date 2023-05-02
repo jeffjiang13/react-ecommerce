@@ -13,6 +13,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 import menuReducer from "./state/menuActions";
+import wishlistReducer from "./features/wishlist/wishlistSlice";
 
 const persistConfig = {
   key: "root",
@@ -27,6 +28,8 @@ const store = configureStore({
     cart: cartReducer,
     auth: persistedAuthReducer,
     menu: menuReducer,
+    wishlist: wishlistReducer,
+
 
   },
   middleware: getDefaultMiddleware({

@@ -64,6 +64,16 @@ function Menu() {
             alignItems="center"
             mb="15px"
           >
+            <Button onClick={() => handleNavigate("/wishlist")}>
+            Wishlist
+          </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mb="15px"
+          >
           <Button onClick={() => handleNavigate("/contact-us")}>
             Contact Us
           </Button>

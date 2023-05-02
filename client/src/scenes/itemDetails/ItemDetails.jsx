@@ -2,23 +2,61 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Item from "../../components/Item";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
 import { addToCart } from "../../state";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../features/wishlist/wishlistSlice";
+import { selectWishlistItems } from "../../features/wishlist/wishlistSlice";
+import { useNavigate } from "react-router-dom";
+import Reviews from "../../components/Reviews";
 
-const ItemDetails = () => {
-  const dispatch = useDispatch();
+const ItemDetails = ({ allItems }) => {
   const { itemId } = useParams();
+  const currentItemIndex = allItems.findIndex(
+    (item) => item.id === itemId.toString()
+  );
+  const dispatch = useDispatch();
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);
   const [items, setItems] = useState([]);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const wishlistItems = useSelector(selectWishlistItems);
+  const isInWishlist = useMemo(() => {
+    return wishlistItems.some((wishlistItem) => wishlistItem.id === item?.id);
+  }, [wishlistItems, item]);
+  const navigate = useNavigate();
+
+  const handlePrevNext = (direction) => {
+    if (!itemId) return;
+
+    const currentItemIndex = allItems.findIndex(
+      (item) => item.id === itemId.toString()
+    );
+    const newIndex = currentItemIndex + direction;
+
+    if (newIndex >= 0 && newIndex < allItems.length) {
+      const newId = allItems[newIndex].id;
+      navigate(`/item/${newId}`);
+    }
+  };
+
+  const handleAddToWishlist = (item) => {
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(item.id));
+    } else {
+      dispatch(addToWishlist(item));
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -33,8 +71,7 @@ const ItemDetails = () => {
     );
     const itemJson = await item.json();
     setItem(itemJson.data);
-    setIsImageLoading(false); // Add this line
-
+    setIsImageLoading(false);
   }
 
   async function getItems() {
@@ -51,8 +88,8 @@ const ItemDetails = () => {
   useEffect(() => {
     getItem();
     getItems();
-  }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [itemId]);
+  console.log(item);
   return (
     <Box width="80%" m="80px auto">
       <Box display="flex" flexWrap="wrap" columnGap="40px">
@@ -65,7 +102,9 @@ const ItemDetails = () => {
               alt={item?.name}
               width="100%"
               height="100%"
-              src={item?.attributes?.image?.data?.attributes?.formats?.medium?.url}
+              src={
+                item?.attributes?.image?.data?.attributes?.formats?.medium?.url
+              }
               style={{ objectFit: "contain" }}
             />
           )}
@@ -74,13 +113,20 @@ const ItemDetails = () => {
         {/* ACTIONS */}
         <Box flex="1 1 50%" mb="40px">
           <Box display="flex" justifyContent="space-between">
-            <Box>Home/Item</Box>
-            <Box>Prev Next</Box>
+            <Box>
+              <Button onClick={() => navigate("/")}>Home</Button>
+            </Box>
+            <Box>
+              <Button onClick={() => handlePrevNext(item.id - 1)}>Prev</Button>
+              <Button onClick={() => handlePrevNext(item.id + 1)}>Next</Button>
+            </Box>
           </Box>
 
           <Box m="65px 0 25px 0">
             <Typography variant="h3">{item?.attributes?.name}</Typography>
-            <Typography>${item?.attributes?.price}</Typography>
+            <Typography fontWeight="bold" fontSize="18px">
+              ${item?.attributes?.price}
+            </Typography>
             <Typography sx={{ mt: "20px" }}>
               {item?.attributes?.longDescription}
             </Typography>
@@ -117,10 +163,19 @@ const ItemDetails = () => {
           </Box>
           <Box>
             <Box m="20px 0 5px 0" display="flex">
-              <FavoriteBorderOutlinedIcon />
-              <Typography sx={{ ml: "5px" }}>ADD TO WISHLIST</Typography>
+              <IconButton onClick={() => handleAddToWishlist(item)}>
+                {isInWishlist ? (
+                  <FavoriteIcon color="error" /> // Show red heart if the item is in the wishlist
+                ) : (
+                  <FavoriteBorderOutlinedIcon />
+                )}
+                <Typography sx={{ ml: "5px" }}>ADD TO WISHLIST</Typography>
+              </IconButton>
             </Box>
-            <Typography>CATEGORIES: {item?.attributes?.category}</Typography>
+
+            <Typography>
+              CATEGORIES: {item?.attributes?.category.toUpperCase()}
+            </Typography>
           </Box>
         </Box>
       </Box>
@@ -136,7 +191,7 @@ const ItemDetails = () => {
         {value === "description" && (
           <div>{item?.attributes?.longDescription}</div>
         )}
-        {value === "reviews" && <div>reviews</div>}
+        {value === "reviews" && <Reviews itemId={itemId} />}
       </Box>
 
       {/* RELATED ITEMS */}
