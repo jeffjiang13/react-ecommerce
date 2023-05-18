@@ -1,5 +1,5 @@
 <div align="center" id="top">
-  <img src="client/public/port6.png" alt="React Ecommerce" />
+  <img src="client/public/port5.png" alt="React Ecommerce" />
 
   &#xa0;
 
