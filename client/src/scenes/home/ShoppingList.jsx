@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Item from "../../components/Item";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state";
@@ -14,17 +14,21 @@ const ShoppingList = () => {
   const items = useSelector((state) => state.cart.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   async function getItems() {
+    setIsLoading(true);
     const items = await fetch(
       "https://react-ecommerce-7d0j.onrender.com/api/items?populate=image",
       { method: "GET" }
     );
     const itemsJson = await items.json();
     dispatch(setItems(itemsJson.data));
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -40,6 +44,34 @@ const ShoppingList = () => {
   const bestSellersItems = items.filter(
     (item) => item.attributes.category === "bestSellers"
   );
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        flexDirection="column"
+      >
+        <CircularProgress color="secondary" />
+        <Box
+          mt={2}
+          p={2}
+          maxWidth="400px" // Set the max width of the message box
+          bgcolor="background.paper"
+          borderRadius="borderRadius"
+          textAlign="center" // Center align the text
+        >
+          <Typography variant="subtitle1">
+            Loading... Please be patient as some apps are hosted on render.com, which may take a moment to load.
+            These apps are designed to automatically spin down after 15 minutes of inactivity, conserving resources.
+            They will promptly spin up again upon your visit. Thank you for your understanding.
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box width="80%" margin="80px auto">
